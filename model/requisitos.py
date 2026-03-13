@@ -2,7 +2,7 @@ from database.conexao import conectar
 
 def pegar_requisitos():
     conexao, cursor = conectar()
-    cursor.execute("SELECT * FROM  tb_requisitos")
+    cursor.execute("SELECT cod_requisito, descricao, nivel, valor, situacao FROM tb_requisitos")
     requisitos = cursor.fetchall()
 
     conexao.close()
@@ -11,9 +11,9 @@ def pegar_requisitos():
 
 def inserir_dados (descricao, nivel, valor):
     conexao, cursor = conectar()
-    cursor.execute("""INSERT INTO tb_requisitos (descricao, nivel, valor)
-                        VALUES (%s, %s, %s)""",
-                        (descricao, nivel, valor))
+    cursor.execute("""INSERT INTO tb_requisitos (descricao, nivel, valor, situacao)
+                        VALUES (%s, %s, %s, %s)""",
+                        [descricao, nivel, valor, 'Pendente'])
     
 
     conexao.commit()
@@ -21,12 +21,20 @@ def inserir_dados (descricao, nivel, valor):
 
 
 
-def deletar(codigo):
+def deletar(codigo: int):
      
     conexao, cursor = conectar()
-    cursor.execute("""
-                    ?????????????
-                    """, [codigo])
+    cursor.execute ("DELETE FROM tb_requisitos WHERE cod_requisito = %s", [codigo])
     conexao.commit()
     conexao.close()
+
+
+
+def situacao(codigo:int, situacao:str):
+    conexao, cursor = conectar()
+    cursor.execute ("UPDATE tb_requisitos SET situacao = %s WHERE cod_requisito = %s",  [situacao, codigo])
+
+    conexao.commit()
+    conexao.close()
+    
         

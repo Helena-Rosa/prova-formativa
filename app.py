@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, request
-from model.requisitos import pegar_requisitos, inserir_dados
+from model.requisitos import pegar_requisitos, inserir_dados, deletar, situacao
 
 
 app= Flask(__name__)
@@ -27,10 +27,23 @@ def dados_post():
 
 
 
-@app.route("/tb_requisitos/delete")
-def deletar():
+@app.route("/requisitos/delete/<codigo>")
+def pg_deletar(codigo):
+    deletar(codigo)
     return redirect("/requisitos")
 
+
+
+@app.route("/requisitos/situacao_pendente/<codigo>")
+def situacao_pendente (codigo):
+    situacao (codigo, 'Pendente')
+    return redirect ("/requisitos")
+
+
+@app.route("/requisitos/situacao_resolvido/<codigo>")
+def situacao_resolvido (codigo):
+    situacao (codigo, 'Resolvido')
+    return redirect ("/requisitos")
 
 
 
